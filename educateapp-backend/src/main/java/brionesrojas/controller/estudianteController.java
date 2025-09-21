@@ -73,7 +73,7 @@ public class estudianteController {
 
         // Enlace para listar todos los pacientes
         Link allPatientsLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(estudianteController.class)
-                .findAll()).withRel("Todos los pacientes");
+                .findAll()).withRel("Todos los estudiantes");
 
         // Agregar los enlaces al DTO
         dto.add(selfLink, updateLink, deleteLink, allPatientsLink);

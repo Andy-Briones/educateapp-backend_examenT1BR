@@ -21,13 +21,13 @@ public class cursos {
     @Column(nullable = false, length = 80)
     private String nombre;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 8)
     private String codigo;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false)
     private int creditos;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false)
     private int semestre;
 
     @ManyToOne

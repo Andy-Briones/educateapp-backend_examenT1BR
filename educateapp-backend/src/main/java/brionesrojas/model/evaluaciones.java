@@ -26,7 +26,7 @@ public class evaluaciones {
     @Column(nullable = false, length = 80)
     private Date fecha;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false)
     private int nota;
 
     @ManyToOne
