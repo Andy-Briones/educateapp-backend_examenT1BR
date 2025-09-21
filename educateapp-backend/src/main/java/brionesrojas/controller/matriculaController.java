@@ -1,6 +1,7 @@
 package brionesrojas.controller;
 
 import brionesrojas.dto.cursoDTO;
+import brionesrojas.dto.estudianteDTO;
 import brionesrojas.dto.matriculaDTO;
 import brionesrojas.model.cursos;
 import brionesrojas.model.docentes;
@@ -72,9 +73,32 @@ public class matriculaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<matriculaDTO> update(@Valid @RequestBody matriculaDTO dto, @PathVariable("id") Integer id) {
-        matriculas mat = service.update(convertToEntity(dto),id);
-        matriculaDTO newmat = convertToDtoWithLinks(mat);
-        return ResponseEntity.ok(newmat);
+//        matriculas mat = service.update(convertToEntity(dto),id);
+//        matriculaDTO newmat = convertToDtoWithLinks(mat);
+//        return ResponseEntity.ok(newmat);
+        matriculas existe = service.findById(id);
+        if (existe == null) {
+            throw new RuntimeException("matricula no encontrado con id " + id);
+        }
+        // Actualizar datos con el mapper
+        modelMapper.map(dto, existe);
+        // Resolver el estudiante
+        if (dto.getEstudiante() != 0) {
+            estudiantes estudiante = repoes.findById(dto.getEstudiante())
+                    .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con id " + dto.getEstudiante()));
+            existe.setEstudiante(estudiante);
+        }
+        //Resolver el curso
+        if(dto.getCurso() != 0) {
+            cursos curso = repocurso.findById(dto.getCurso())
+                    .orElseThrow(()-> new RuntimeException("Curso no encontrado con id " + dto.getCurso()));
+            existe.setCurso(curso);
+        }
+        // Guardar cambios
+        matriculas updated = service.update(existe, id);
+        // Convertir a DTO de respuesta
+        matriculaDTO response = modelMapper.map(updated, matriculaDTO.class);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")

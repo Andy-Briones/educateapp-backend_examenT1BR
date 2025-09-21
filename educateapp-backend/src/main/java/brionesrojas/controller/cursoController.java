@@ -94,23 +94,23 @@ public class cursoController {
 //        // Convertir a DTO con links
 //        cursoDTO response = convertToDtoWithLinks(updatedCurso);
         // Buscar curso existente
-        cursos existing = service.findById(id);
-        if (existing == null) {
+        cursos existe = service.findById(id);
+        if (existe == null) {
             throw new RuntimeException("Curso no encontrado con id " + id);
         }
 
-        // Actualizar datos básicos con el mapper
-        modelMapper.map(dto, existing);
+        // Actualizar datos con el mapper
+        modelMapper.map(dto, existe);
 
         // Resolver el docente
         if (dto.getDocente() != 0) {
             docentes docente = repo.findById(dto.getDocente())
                     .orElseThrow(() -> new RuntimeException("Docente no encontrado con id " + dto.getDocente()));
-            existing.setDocente(docente);
+            existe.setDocente(docente);
         }
 
         // Guardar cambios
-        cursos updated = service.update(existing, id);
+        cursos updated = service.update(existe, id);
 
         // Convertir a DTO de respuesta
         cursoDTO response = modelMapper.map(updated, cursoDTO.class);
